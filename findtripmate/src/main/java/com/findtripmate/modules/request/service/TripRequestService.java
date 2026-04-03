@@ -1,4 +1,6 @@
 package com.findtripmate.modules.request.service;
 
-public class TripRequestService {
+public interface TripRequestService {
+
+    void sendRequest(Long tripId, Long userId);
 }

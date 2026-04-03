@@ -1,6 +1,7 @@
 package com.findtripmate.modules.trip.entity;
 
 import com.findtripmate.modules.user.entity.User;
+import com.findtripmate.common.enums.TripStatus;
 import jakarta.persistence.*;
 import lombok.*;
 

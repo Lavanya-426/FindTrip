@@ -1,4 +1,8 @@
 package com.findtripmate.modules.trip.service;
 
-public class TripService {
+import com.findtripmate.modules.trip.entity.Trip;
+
+public interface TripService {
+
+    Trip createTrip(Trip trip, Long userId);
 }

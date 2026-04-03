@@ -1,4 +1,6 @@
 package com.findtripmate.modules.membership.service;
 
-public class MembershipService {
+public interface MembershipService {
+
+    long getMemberCount(Long tripId);
 }

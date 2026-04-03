@@ -21,14 +21,14 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable()) // disable csrf for APIs
 
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/**").permitAll() // ✅ allow auth
+                .requestMatchers("/auth/**").permitAll() // allow auth
                 .requestMatchers("/users/**").permitAll() //allow users
-                .requestMatchers("/h2-console/**").permitAll() // ✅ allow H2
+                .requestMatchers("/h2-console/**").permitAll() // allow H2
                 .anyRequest().authenticated()
             )
 
             .headers(headers -> headers
-                .frameOptions(frame -> frame.disable()) // ✅ allow H2 console
+                .frameOptions(frame -> frame.disable()) // allow H2 console
             );
 
         return http.build();

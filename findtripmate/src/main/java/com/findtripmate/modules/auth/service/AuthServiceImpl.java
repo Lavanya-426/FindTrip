@@ -40,7 +40,7 @@ public class AuthServiceImpl implements AuthService {
         userRepository.save(user);
     }
 
-    // 🔥 LOGIN LOGIC
+    // LOGIN LOGIC
     @Override
     public AuthResponseDTO login(LoginRequestDTO request) {
 
