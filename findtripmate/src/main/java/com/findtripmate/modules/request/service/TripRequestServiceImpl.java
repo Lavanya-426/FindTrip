@@ -53,4 +53,48 @@ public class TripRequestServiceImpl implements TripRequestService {
 
         requestRepository.save(request);
     }
+
+    // for accepting request 
+    public void acceptRequest(Long requestId, Long ownerId) {
+
+    TripRequest request = requestRepository.findById(requestId)
+            .orElseThrow(() -> new CustomException("Request not found", HttpStatus.NOT_FOUND));
+
+    Trip trip = request.getTrip();
+
+    // Only trip owner can accept
+    if (!trip.getCreatedBy().getId().equals(ownerId)) {
+        throw new CustomException("Not authorized", HttpStatus.FORBIDDEN);
+    }
+
+    // Already processed?
+    if (request.getStatus() != RequestStatus.PENDING) {
+        throw new CustomException("Request already handled", HttpStatus.BAD_REQUEST);
+    }
+
+    request.setStatus(RequestStatus.ACCEPTED);
+
+    requestRepository.save(request);
+}
+
+// for rejecting request
+public void rejectRequest(Long requestId, Long ownerId) {
+
+    TripRequest request = requestRepository.findById(requestId)
+            .orElseThrow(() -> new CustomException("Request not found", HttpStatus.NOT_FOUND));
+
+    Trip trip = request.getTrip();
+
+    if (!trip.getCreatedBy().getId().equals(ownerId)) {
+        throw new CustomException("Not authorized", HttpStatus.FORBIDDEN);
+    }
+
+    if (request.getStatus() != RequestStatus.PENDING) {
+        throw new CustomException("Request already handled", HttpStatus.BAD_REQUEST);
+    }
+
+    request.setStatus(RequestStatus.REJECTED);
+
+    requestRepository.save(request);
+}
 }

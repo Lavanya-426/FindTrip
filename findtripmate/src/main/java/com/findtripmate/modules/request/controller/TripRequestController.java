@@ -18,9 +18,27 @@ public class TripRequestController {
             @RequestParam Long tripId,
             @RequestParam Long userId
     ) {
-
         requestService.sendRequest(tripId, userId);
-
         return ResponseEntity.ok("Request sent successfully");
+    }
+
+    // Accept Request
+    @PostMapping("/{requestId}/accept")
+    public ResponseEntity<String> acceptRequest(
+            @PathVariable Long requestId,
+            @RequestParam Long ownerId
+    ) {
+        requestService.acceptRequest(requestId, ownerId);
+        return ResponseEntity.ok("Request accepted successfully");
+    }
+
+    // Reject Request
+    @PostMapping("/{requestId}/reject")
+    public ResponseEntity<String> rejectRequest(
+            @PathVariable Long requestId,
+            @RequestParam Long ownerId
+    ) {
+        requestService.rejectRequest(requestId, ownerId);
+        return ResponseEntity.ok("Request rejected successfully");
     }
 }
