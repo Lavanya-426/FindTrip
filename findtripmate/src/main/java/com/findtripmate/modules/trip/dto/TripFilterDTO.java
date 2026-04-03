@@ -1,23 +1,14 @@
 package com.findtripmate.modules.trip.dto;
 
-import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Data
-@Builder
-public class TripResponseDTO {
+public class TripFilterDTO {
 
-    private Long id;
     private String source;
     private String destination;
-
     private LocalDateTime departureTime;
     private Integer seats;
-
-    private String description;
-    private String status;
-
-    private Long createdBy;
 }

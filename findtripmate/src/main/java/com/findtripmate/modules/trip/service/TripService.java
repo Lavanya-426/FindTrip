@@ -1,8 +1,20 @@
 package com.findtripmate.modules.trip.service;
 
-import com.findtripmate.modules.trip.entity.Trip;
+import com.findtripmate.modules.trip.dto.CreateTripRequestDTO;
+import com.findtripmate.modules.trip.dto.TripFilterDTO;
+import com.findtripmate.modules.trip.dto.TripResponseDTO;
+
+import java.util.List;
 
 public interface TripService {
 
-    Trip createTrip(Trip trip, Long userId);
+    void createTrip(CreateTripRequestDTO request);
+
+    List<TripResponseDTO> getAllTrips();
+
+    TripResponseDTO getTripById(Long tripId);
+
+    void deleteTrip(Long tripId, Long userId);
+
+    List<TripResponseDTO> filterTrips(TripFilterDTO filter);
 }
