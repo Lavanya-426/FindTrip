@@ -1,6 +1,7 @@
 package com.findtripmate.modules.trip.service;
 
-import com.findtripmate.modules.trip.dto.*;
+import com.findtripmate.modules.trip.dto.CreateTripRequestDTO;
+import com.findtripmate.modules.trip.dto.TripResponseDTO;
 import com.findtripmate.modules.trip.entity.Trip;
 import com.findtripmate.modules.trip.repository.TripRepository;
 import com.findtripmate.modules.user.entity.User;
@@ -17,6 +18,7 @@ public class TripServiceImpl implements TripService {
     private final TripRepository tripRepository;
     private final UserRepository userRepository;
 
+    // CREATE TRIP
     @Override
     public void createTrip(CreateTripRequestDTO request) {
 
@@ -39,20 +41,26 @@ public class TripServiceImpl implements TripService {
         tripRepository.save(trip);
     }
 
+    // GET ALL TRIPS
     @Override
     public List<TripResponseDTO> getAllTrips() {
-        return mapToDTO(tripRepository.findAll());
+        return tripRepository.findAll()
+                .stream()
+                .map(this::mapSingleToDTO)
+                .toList();
     }
 
+    // GET TRIP BY ID
     @Override
     public TripResponseDTO getTripById(Long tripId) {
 
         Trip trip = tripRepository.findById(tripId)
                 .orElseThrow(() -> new RuntimeException("Trip not found"));
 
-        return mapToDTO(List.of(trip)).get(0);
+        return mapSingleToDTO(trip);
     }
 
+    // DELETE TRIP
     @Override
     public void deleteTrip(Long tripId, Long userId) {
 
@@ -66,34 +74,17 @@ public class TripServiceImpl implements TripService {
         tripRepository.delete(trip);
     }
 
-    // FILTER LOGIC
-    @Override
-    public List<TripResponseDTO> filterTrips(TripFilterDTO filter) {
-
-        List<Trip> trips = tripRepository.filterTrips(
-                filter.getSource(),
-                filter.getDestination(),
-                filter.getDepartureTime(),
-                filter.getSeats()
-        );
-
-        return mapToDTO(trips);
-    }
-
-    // COMMON MAPPER (clean code)
-    private List<TripResponseDTO> mapToDTO(List<Trip> trips) {
-        return trips.stream()
-                .map(trip -> TripResponseDTO.builder()
-                        .id(trip.getId())
-                        .source(trip.getSource())
-                        .destination(trip.getDestination())
-                        .departureTime(trip.getDepartureTime())
-                        .seats(trip.getSeats())
-                        .description(trip.getDescription())
-                        .status(trip.getStatus().name())
-                        .createdBy(trip.getCreatedBy().getId())
-                        .build()
-                )
-                .toList();
+    // 🔁 SINGLE MAPPER
+    private TripResponseDTO mapSingleToDTO(Trip trip) {
+        return TripResponseDTO.builder()
+                .id(trip.getId())
+                .source(trip.getSource())
+                .destination(trip.getDestination())
+                .departureTime(trip.getDepartureTime())
+                .seats(trip.getSeats())
+                .description(trip.getDescription())
+                .status(trip.getStatus().name())
+                .createdBy(trip.getCreatedBy().getId())
+                .build();
     }
 }
