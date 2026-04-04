@@ -1,4 +1,10 @@
 package com.findtripmate.modules.matching.service;
 
-public class MatchingService {
+import com.findtripmate.modules.matching.dto.*;
+
+import java.util.List;
+
+public interface MatchingService {
+
+    List<MatchResponseDTO> findMatchingTrips(MatchRequestDTO request);
 }
