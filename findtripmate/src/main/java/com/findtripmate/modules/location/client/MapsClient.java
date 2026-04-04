@@ -7,6 +7,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 import java.util.Map;
 @Component
+@SuppressWarnings("unchecked")
 @RequiredArgsConstructor
 public class MapsClient {
 
@@ -16,7 +17,7 @@ public class MapsClient {
 
         String url = "https://nominatim.openstreetmap.org/search?q="
 + query + "&format=json";
-        @SuppressWarnings("unchecked")
+        
         return restTemplate.getForObject(url, List.class);
     }
 }
