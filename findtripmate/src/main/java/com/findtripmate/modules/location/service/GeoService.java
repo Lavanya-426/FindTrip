@@ -1,4 +1,10 @@
 package com.findtripmate.modules.location.service;
 
-public class GeoService {
+import com.findtripmate.modules.location.dto.LocationResponseDTO;
+
+import java.util.List;
+
+public interface GeoService {
+
+    List<LocationResponseDTO> searchLocation(String query);
 }
