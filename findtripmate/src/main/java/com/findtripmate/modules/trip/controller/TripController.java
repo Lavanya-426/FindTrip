@@ -40,11 +40,4 @@ public class TripController {
         return ResponseEntity.ok("Trip deleted successfully");
     }
 
-    // FILTER ENDPOINT
-    @PostMapping("/filter")
-    public ResponseEntity<List<TripResponseDTO>> filterTrips(
-            @RequestBody TripFilterDTO filter
-    ) {
-        return ResponseEntity.ok(tripService.filterTrips(filter));
-    }
-}
+ }
