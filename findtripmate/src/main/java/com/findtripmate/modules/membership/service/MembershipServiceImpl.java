@@ -1,7 +1,6 @@
 package com.findtripmate.modules.membership.service;
 
 import com.findtripmate.modules.membership.dto.MemberResponseDTO;
-import com.findtripmate.modules.membership.entity.TripMember;
 import com.findtripmate.modules.membership.repository.MembershipRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
