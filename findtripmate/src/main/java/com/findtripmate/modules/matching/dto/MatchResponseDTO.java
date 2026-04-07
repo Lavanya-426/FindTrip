@@ -1,5 +1,6 @@
 package com.findtripmate.modules.matching.dto;
 
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Data;
 
@@ -11,4 +12,5 @@ public class MatchResponseDTO {
     private String source;
     private String destination;
     private Double distance;
+    private LocalDateTime departureTime;
 }

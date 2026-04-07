@@ -1,12 +1,14 @@
 package com.findtripmate.modules.matching.service;
 
 import com.findtripmate.common.enums.TripStatus;
-import com.findtripmate.modules.matching.dto.*;
+import com.findtripmate.modules.matching.dto.MatchRequestDTO;
+import com.findtripmate.modules.matching.dto.MatchResponseDTO;
 import com.findtripmate.modules.trip.entity.Trip;
 import com.findtripmate.modules.trip.repository.TripRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -20,8 +22,7 @@ public class MatchingServiceImpl implements MatchingService {
 
         List<Trip> trips = tripRepository.findByStatus(TripStatus.ACTIVE);
 
-        return trips.stream()
-                .map(trip -> {
+        return trips.stream().map((Trip trip) -> {
 
                     double distance = calculateDistance(
                             request.getLat(),
@@ -35,18 +36,42 @@ public class MatchingServiceImpl implements MatchingService {
                             .source(trip.getSource())
                             .destination(trip.getDestination())
                             .distance(distance)
+                            .departureTime(trip.getDepartureTime())
                             .build();
                 })
+
+                // LOCATION FILTER (radius)
                 .filter(res -> res.getDistance() <= request.getRadius())
+
+                // TIME FILTER (± window)
+                .filter(res -> isWithinTimeWindow(
+                        res.getDepartureTime(),
+                        request.getRequestedTime(),
+                        request.getTimeWindowMinutes()
+                ))
+
+                // optional: sort by nearest
+                .sorted((a, b) -> Double.compare(a.getDistance(), b.getDistance()))
+
                 .toList();
     }
 
-    // Haversine Formula
+    // TIME WINDOW LOGIC
+    private boolean isWithinTimeWindow(
+            LocalDateTime tripTime,
+            LocalDateTime requestedTime,
+            int windowMinutes
+    ) {
+        return !tripTime.isBefore(requestedTime.minusMinutes(windowMinutes)) &&
+               !tripTime.isAfter(requestedTime.plusMinutes(windowMinutes));
+    }
+
+    // HAVERSINE FORMULA
     private double calculateDistance(
             double lat1, double lon1,
             double lat2, double lon2
     ) {
-        final int R = 6371; // Earth radius (km)
+        final int R = 6371; // km
 
         double latDistance = Math.toRadians(lat2 - lat1);
         double lonDistance = Math.toRadians(lon2 - lon1);
